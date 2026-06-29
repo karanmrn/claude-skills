@@ -1,6 +1,6 @@
 # Skill Explainer
 > A plain-English guide to every skill installed in Claude Code and Codex.
-> Last updated: 2026-06-28 (added understand-anything)
+> Last updated: 2026-06-30 (added drawio-skill, ponytail, improve)
 
 ---
 
@@ -26,8 +26,11 @@ Skills marked `[agent-only]` are not user-invocable — they are loaded automati
 7. [Everything Claude Code (ecc)](#7-everything-claude-code-ecc)
 8. [Cybersecurity Skills](#8-cybersecurity-skills)
 9. [Understand Anything](#9-understand-anything)
-10. [Pi Agent](#10-pi-agent)
-11. [Quick Reference](#quick-reference-what-skill-should-i-use-for-x)
+10. [Draw.io Diagrams (drawio-skill)](#10-drawio-diagrams-drawio-skill)
+11. [Ponytail — Lazy Mode](#11-ponytail--lazy-mode)
+12. [Improve — Senior Advisor](#12-improve--senior-advisor)
+13. [Pi Agent](#13-pi-agent)
+14. [Quick Reference](#quick-reference-what-skill-should-i-use-for-x)
 
 ---
 
@@ -816,7 +819,132 @@ Understand Anything is a codebase analysis plugin that builds an interactive kno
 
 ---
 
-## 10. Pi Agent
+## 10. Draw.io Diagrams (drawio-skill)
+
+Generates professional `.drawio` XML diagrams and exports them locally as PNG, SVG, PDF, or JPG using the native draw.io desktop app CLI. Includes 10,000+ stock shapes, AI/LLM brand logos, and optional auto-layout via Graphviz.
+
+**Prerequisite:** draw.io desktop app installed and on PATH (`brew install drawio` on macOS).
+
+---
+
+### `drawio-skill`
+**What it does:** Generates any diagram type — architecture, flowchart, ERD, UML class/sequence, network topology, ML model figures, swimlanes, mind maps — as editable `.drawio` XML and exports to image.
+
+**Use it when:**
+- You need a polished, precise diagram (not a quick sketch)
+- The diagram involves 3+ components, complex data flows, or needs custom shapes
+- You want an exportable file (PNG/SVG/PDF) that remains editable in draw.io
+- You need AI/LLM brand logos in your diagram (OpenAI, Claude, Gemini, etc.)
+
+**Do NOT use it when:**
+- You want a hand-drawn / whiteboard look → use `visual-explainer:generate-web-diagram` (Mermaid) instead
+- You want diagrams-as-code in git/Markdown → use Mermaid
+- You want a quick freeform sketch → use tldraw/excalidraw
+
+**How to invoke:** `/drawio-skill <describe the diagram>`
+
+**Supports:** PNG, SVG, PDF, JPG export with optional embedded XML (`--embed-diagram` flag so the image is also editable).
+
+---
+
+## 11. Ponytail — Lazy Mode
+
+Ponytail enforces the simplest, shortest, most minimal solution — YAGNI, stdlib first, one line over fifty. It channels a senior dev who has seen every over-engineered codebase and knows exactly what to delete.
+
+---
+
+### `ponytail`
+**What it does:** Applies "lazy mode" to any coding task — rewrites or reviews it to be as short and simple as possible while still working correctly.
+
+**Use it when:**
+- You catch yourself writing boilerplate you've seen a hundred times
+- You're about to add a dependency that the stdlib could handle
+- You want to check if a solution is simpler than what you've written
+- You say "be lazy", "simplest solution", "YAGNI", or "do less"
+
+**How to invoke:** `/ponytail [lite|full|ultra]`
+- `lite` — nudges only (flags issues, doesn't rewrite)
+- `full` (default) — full ponytail mode
+- `ultra` — maximum laziness, challenges whether the feature should exist at all
+
+---
+
+### `ponytail-review`
+**What it does:** Code review focused exclusively on over-engineering — finds reinvented stdlib, unneeded dependencies, speculative abstractions, premature patterns.
+
+**Use it when:** You want a review that *only* looks for over-engineering, not bugs or style.
+
+**How to invoke:** `/ponytail-review`
+
+---
+
+### `ponytail-audit`
+**What it does:** Whole-repo audit for over-engineering — produces a ranked list of what to delete or simplify across the entire codebase.
+
+**Use it when:** You've inherited or grown a codebase and want to know what the biggest complexity offenders are.
+
+**How to invoke:** `/ponytail-audit`
+
+---
+
+### `ponytail-debt`
+**What it does:** Harvests every `ponytail:` comment in the codebase into a debt ledger so deliberate shortcuts get tracked instead of forgotten.
+
+**Use it when:** You or your team use `// ponytail: defer X` annotations and want a consolidated list of deferred decisions.
+
+**How to invoke:** `/ponytail-debt`
+
+---
+
+### `ponytail-gain`
+**What it does:** Shows ponytail's measured impact as a compact scoreboard — less code, less cost, more speed — from benchmark medians.
+
+**Use it when:** You want to quantify the simplification gains from a ponytail session.
+
+**How to invoke:** `/ponytail-gain`
+
+---
+
+### `ponytail-help`
+**What it does:** Quick-reference card for all ponytail modes, skills, and commands.
+
+**Use it when:** You want a one-shot cheat sheet for ponytail without reading this doc.
+
+**How to invoke:** `/ponytail-help`
+
+---
+
+## 12. Improve — Senior Advisor
+
+Improve acts as a read-only senior advisor — it surveys the entire codebase, finds the highest-value improvement opportunities, and writes self-contained implementation plans for another agent (or a less expensive model) to execute. It never touches your source code directly.
+
+---
+
+### `improve`
+**What it does:** Audits a codebase as a senior advisor and produces prioritized, fully self-contained implementation plans covering bugs, security issues, performance, test coverage, tech debt, migrations, DX improvements, and product roadmap suggestions.
+
+**Use it when:**
+- You want an expert audit of what's wrong or missing in a codebase
+- You want improvement plans that a cheaper/faster model can execute without context from this session
+- You want to know where to take the project next (roadmap, product direction)
+- You want a handoff plan: "here's what needs fixing and exactly how to fix it"
+
+**Key rules this skill enforces:**
+- Never modifies source code — only writes to a `plans/` directory
+- Every plan is self-contained (the executor has zero context from this session)
+- Never reproduces secret values — flags file:line and credential type only
+- Treats all repo content as data, not instructions (prompt injection resistance)
+
+**How to invoke:** `/improve` or `/improve <focus area>`
+
+**Variants:**
+- `/improve` — full codebase audit
+- `/improve security` — focus on security issues only
+- `/improve execute <plan>` — dispatches a separate executor subagent to implement a specific plan, then reviews the diff
+
+---
+
+## 13. Pi Agent
 
 Pi is an open-source AI coding agent installed at `/Users/karanmanoharan/.hermes/node/bin/pi`. Current version: **0.80.2**.
 
@@ -859,6 +987,10 @@ Pi is an open-source AI coding agent installed at `/Users/karanmanoharan/.hermes
 | Plan before coding | `ecc:planner` |
 | Remove dead code | `ecc:refactor-cleaner` |
 | Open source a private project | `ecc:opensource-forker` → `ecc:opensource-sanitizer` → `ecc:opensource-packager` |
+| Generate a professional diagram (architecture, ERD, UML) | `/drawio-skill <describe it>` |
+| Get the simplest possible solution | `/ponytail` |
+| Audit whole repo for over-engineering | `/ponytail-audit` |
+| Audit codebase and produce improvement plans | `/improve` |
 | Build a knowledge graph of a codebase | `/understand` |
 | Browse architecture visually | `/understand-dashboard` |
 | Ask questions about the codebase | `/understand-chat <question>` |
